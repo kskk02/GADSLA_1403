@@ -14,28 +14,28 @@ def cos(v1, v2):
 
 
 def process_text(text):
-	text=text.lower()
-	return ("".join(c for c in text if c==" " or c.isalpha())).split()
-	    
+    text=text.lower()
+    return ("".join(c for c in text if c==" " or c.isalpha())).split()
+        
 # BEGIN TESTS
 assert process_text('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in python!') == ['python', 'is', 'so', 'awesome', 'yay', 'i', 'love', 'programming', 'in', 'python']
-# END TESTS
+# END TESTS 
 
 
 # Question 2: Count word occurences
 def count_words(text):
 #    '''FILL IN ANSWER HERE.'''
-	listofwords = process_text(text)
-	result = dict()
-	for word in listofwords:
-		if word in result:
-			result[word]+=1
-		else:
-			result[word]=1
-	return result # can this be done by list comprehension?
+    listofwords = process_text(text)
+    result = dict()
+    for word in listofwords:
+        if word in result:
+            result[word]+=1
+        else:
+            result[word]=1
+    return result # can this be done by list comprehension?
 
 
-#	return Counter(listofwords)
+#   return Counter(listofwords)
 # BEGIN TESTS
 assert count_words('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in python!') == {'yay': 1, 'python': 2, 'is': 1, 'programming': 1, 'i': 1, 'so': 1, 'in': 1, 'love': 1, 'awesome': 1}
 # END TESTS
@@ -43,9 +43,9 @@ assert count_words('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in py
 # Question 3: Create a string distance function
 def distance(text1, text2):
 
-	vectorizer = TfidfVectorizer(min_df=1)
-	vectorized_text = vectorizer.fit_transform([text1 , text2])
-	return (1 - cos(vectorized_text.toarray()[0], vectorized_text.toarray()[1]))
+    vectorizer = TfidfVectorizer(min_df=1)
+    vectorized_text = vectorizer.fit_transform([text1 , text2])
+    return (1 - cos(vectorized_text.toarray()[0], vectorized_text.toarray()[1]))
 
 # BEGIN TESTS
 assert distance('I love my mom', 'i love my daddy') < distance('I love my mom', 'I am a big boy now')

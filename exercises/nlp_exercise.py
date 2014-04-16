@@ -1,19 +1,22 @@
-'''This is a short exercise designed to test your knowledge of basic natural
-language processing (NLP) techniques in Python. It is also one of the interview
-questions I ask entry-level data science candidates at Whisper.
 
-In each of the parts below, I have provided a function definition (with the
-correct arguments but no implementation) and some tests that will pass *if* 
-you fill in the correct implementation for each function. If you run this file
- (i.e. run `python nlp_exercise.py` from your shell) and it does not throw
- any errors, then you have finished the exercise!
-'''
+from collections import Counter
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy as np
+from math import sqrt
+from itertools import izip
 
-# Question 1: Normalization and Tokenization
+
+def cos(v1, v2):
+    return np.dot(v1, v2) / (np.sqrt(np.dot(v1, v1)) * np.sqrt(np.dot(v2, v2)))
+
 
 def process_text(text):
-    '''FILL IN ANSWER HERE.'''
-    
+	text=text.lower()
+	return ("".join(c for c in text if c==" " or c.isalpha())).split()
+	    
 # BEGIN TESTS
 assert process_text('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in python!') == ['python', 'is', 'so', 'awesome', 'yay', 'i', 'love', 'programming', 'in', 'python']
 # END TESTS
@@ -21,15 +24,28 @@ assert process_text('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in p
 
 # Question 2: Count word occurences
 def count_words(text):
-    '''FILL IN ANSWER HERE.'''
+#    '''FILL IN ANSWER HERE.'''
+	listofwords = process_text(text)
+	result = dict()
+	for word in listofwords:
+		if word in result:
+			result[word]+=1
+		else:
+			result[word]=1
+	return result # can this be done by list comprehension?
 
+
+#	return Counter(listofwords)
 # BEGIN TESTS
 assert count_words('Python is SO AWESOME!!!!!! YAy!!!!@ I love programming in python!') == {'yay': 1, 'python': 2, 'is': 1, 'programming': 1, 'i': 1, 'so': 1, 'in': 1, 'love': 1, 'awesome': 1}
 # END TESTS
 
 # Question 3: Create a string distance function
 def distance(text1, text2):
-    '''FILL IN ANSWER HERE.'''
+
+	vectorizer = TfidfVectorizer(min_df=1)
+	vectorized_text = vectorizer.fit_transform([text1 , text2])
+	return (1 - cos(vectorized_text.toarray()[0], vectorized_text.toarray()[1]))
 
 # BEGIN TESTS
 assert distance('I love my mom', 'i love my daddy') < distance('I love my mom', 'I am a big boy now')
@@ -38,5 +54,4 @@ assert distance('i hate hate hate noodles.', 'i hate hate noodles') < distance('
 # END TESTS
 
 print 'All tests passed. Congratulations!'
-
 

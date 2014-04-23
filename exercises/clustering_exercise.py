@@ -4,13 +4,26 @@ you fill in the correct implementation for each function. If you run this file
  (i.e. run `python clustering_exercise.py` from your shell) and it does not throw
  any errors, then you have finished the exercise!
 '''
+from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn import metrics 
+from scipy.cluster.vq import kmeans,vq
+from collections import defaultdict
 
 def cluster_points(points, number_of_clusters):
-    '''This function should take a list of points (in two dimensions) and return a list of clusters,
-    each of which is a list of points. For example, if you passed in [(0, 0), (-0.1, 0.1), (2,3), (2.1, 3)] 
-    with number_of_clusters set to 2, it should return [[(0, 0), (-0.1, 0.1)], [(2,3), (2.1, 3)]].'''
+#    '''This function should take a list of points (in two dimensions) and return a list of clusters,
+ #   each of which is a list of points. For example, if you passed in [(0, 0), (-0.1, 0.1), (2,3), (2.1, 3)] 
+  #  with number_of_clusters set to 2, it should return [[(0, 0), (-0.1, 0.1)], [(2,3), (2.1, 3)]].'''
 
 ### Test code below ###
+   km = KMeans(n_clusters=number_of_clusters, init='k-means++', max_iter=100, n_init=1)
+   km.fit(points)
+   labels = km.labels_
+   result = zip(points,labels)
+   res = defaultdict(list)
+   for x,y in result:
+ 		res[y].append(x)
+   result_list = [res[x] for x in res.keys()]
+   return result_list
 
 assert map(set, cluster_points([(0, 0), (-0.1, 0.1), (2,3), (2.1, 3)], 2)) == [set([(0, 0), (-0.1, 0.1)]), set([(2,3), (2.1, 3)])]
 
